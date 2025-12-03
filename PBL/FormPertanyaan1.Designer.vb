@@ -23,7 +23,8 @@ Partial Class FormPertanyaan1
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.ButtonLanjut = New System.Windows.Forms.Button()
-        Me.pnlcontainer = New System.Windows.Forms.Panel()
+        Me.PanelPertanyaan1 = New System.Windows.Forms.Panel()
+        Me.ButtonSebelum = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
         'ButtonLanjut
@@ -31,27 +32,40 @@ Partial Class FormPertanyaan1
         Me.ButtonLanjut.BackColor = System.Drawing.SystemColors.ControlDarkDark
         Me.ButtonLanjut.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.0!)
         Me.ButtonLanjut.ForeColor = System.Drawing.SystemColors.ButtonFace
-        Me.ButtonLanjut.Location = New System.Drawing.Point(766, 418)
+        Me.ButtonLanjut.Location = New System.Drawing.Point(769, 419)
         Me.ButtonLanjut.Name = "ButtonLanjut"
         Me.ButtonLanjut.Size = New System.Drawing.Size(131, 28)
         Me.ButtonLanjut.TabIndex = 0
         Me.ButtonLanjut.Text = "Lanjut"
         Me.ButtonLanjut.UseVisualStyleBackColor = False
         '
-        'pnlcontainer
+        'PanelPertanyaan1
         '
-        Me.pnlcontainer.AutoScroll = True
-        Me.pnlcontainer.Location = New System.Drawing.Point(49, 36)
-        Me.pnlcontainer.Name = "pnlcontainer"
-        Me.pnlcontainer.Size = New System.Drawing.Size(848, 362)
-        Me.pnlcontainer.TabIndex = 1
+        Me.PanelPertanyaan1.AutoScroll = True
+        Me.PanelPertanyaan1.Location = New System.Drawing.Point(49, 30)
+        Me.PanelPertanyaan1.Name = "PanelPertanyaan1"
+        Me.PanelPertanyaan1.Size = New System.Drawing.Size(851, 360)
+        Me.PanelPertanyaan1.TabIndex = 1
+        '
+        'ButtonSebelum
+        '
+        Me.ButtonSebelum.BackColor = System.Drawing.SystemColors.ControlDarkDark
+        Me.ButtonSebelum.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.0!)
+        Me.ButtonSebelum.ForeColor = System.Drawing.SystemColors.ButtonFace
+        Me.ButtonSebelum.Location = New System.Drawing.Point(49, 419)
+        Me.ButtonSebelum.Name = "ButtonSebelum"
+        Me.ButtonSebelum.Size = New System.Drawing.Size(131, 28)
+        Me.ButtonSebelum.TabIndex = 2
+        Me.ButtonSebelum.Text = "Sebelumnya"
+        Me.ButtonSebelum.UseVisualStyleBackColor = False
         '
         'FormPertanyaan1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(953, 473)
-        Me.Controls.Add(Me.pnlcontainer)
+        Me.Controls.Add(Me.ButtonSebelum)
+        Me.Controls.Add(Me.PanelPertanyaan1)
         Me.Controls.Add(Me.ButtonLanjut)
         Me.Name = "FormPertanyaan1"
         Me.Text = "Form2"
@@ -60,5 +74,6 @@ Partial Class FormPertanyaan1
     End Sub
 
     Friend WithEvents ButtonLanjut As Button
-    Friend WithEvents pnlcontainer As Panel
+    Friend WithEvents PanelPertanyaan1 As Panel
+    Friend WithEvents ButtonSebelum As Button
 End Class
