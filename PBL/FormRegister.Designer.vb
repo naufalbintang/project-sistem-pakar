@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
-Partial Class FormInputDataDiri
+Partial Class FormRegister
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
@@ -30,8 +30,8 @@ Partial Class FormInputDataDiri
         Me.TextBoxNIM = New System.Windows.Forms.TextBox()
         Me.TextBoxNama = New System.Windows.Forms.TextBox()
         Me.TextBoxEmail = New System.Windows.Forms.TextBox()
-        Me.TextBoxHP = New System.Windows.Forms.TextBox()
         Me.ButtonSimpan = New System.Windows.Forms.Button()
+        Me.TextBoxPassword = New System.Windows.Forms.TextBox()
         Me.SuspendLayout()
         '
         'Label1
@@ -76,9 +76,9 @@ Partial Class FormInputDataDiri
         Me.Label5.AutoSize = True
         Me.Label5.Location = New System.Drawing.Point(222, 310)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(49, 16)
+        Me.Label5.Size = New System.Drawing.Size(67, 16)
         Me.Label5.TabIndex = 4
-        Me.Label5.Text = "No. Hp"
+        Me.Label5.Text = "Password"
         '
         'TextBoxNIM
         '
@@ -104,14 +104,6 @@ Partial Class FormInputDataDiri
         Me.TextBoxEmail.Size = New System.Drawing.Size(500, 25)
         Me.TextBoxEmail.TabIndex = 7
         '
-        'TextBoxHP
-        '
-        Me.TextBoxHP.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!)
-        Me.TextBoxHP.Location = New System.Drawing.Point(225, 342)
-        Me.TextBoxHP.Name = "TextBoxHP"
-        Me.TextBoxHP.Size = New System.Drawing.Size(500, 25)
-        Me.TextBoxHP.TabIndex = 8
-        '
         'ButtonSimpan
         '
         Me.ButtonSimpan.BackColor = System.Drawing.SystemColors.ControlDarkDark
@@ -124,13 +116,21 @@ Partial Class FormInputDataDiri
         Me.ButtonSimpan.Text = "Simpan"
         Me.ButtonSimpan.UseVisualStyleBackColor = False
         '
-        'FormInputDataDiri
+        'TextBoxPassword
+        '
+        Me.TextBoxPassword.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!)
+        Me.TextBoxPassword.Location = New System.Drawing.Point(225, 343)
+        Me.TextBoxPassword.Name = "TextBoxPassword"
+        Me.TextBoxPassword.Size = New System.Drawing.Size(500, 25)
+        Me.TextBoxPassword.TabIndex = 10
+        '
+        'FormIRegister
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(953, 473)
+        Me.Controls.Add(Me.TextBoxPassword)
         Me.Controls.Add(Me.ButtonSimpan)
-        Me.Controls.Add(Me.TextBoxHP)
         Me.Controls.Add(Me.TextBoxEmail)
         Me.Controls.Add(Me.TextBoxNama)
         Me.Controls.Add(Me.TextBoxNIM)
@@ -139,7 +139,7 @@ Partial Class FormInputDataDiri
         Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label1)
-        Me.Name = "FormInputDataDiri"
+        Me.Name = "FormIRegister"
         Me.Text = "Form1"
         Me.ResumeLayout(False)
         Me.PerformLayout()
@@ -154,6 +154,6 @@ Partial Class FormInputDataDiri
     Friend WithEvents TextBoxNIM As TextBox
     Friend WithEvents TextBoxNama As TextBox
     Friend WithEvents TextBoxEmail As TextBox
-    Friend WithEvents TextBoxHP As TextBox
     Friend WithEvents ButtonSimpan As Button
+    Friend WithEvents TextBoxPassword As TextBox
 End Class

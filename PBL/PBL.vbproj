@@ -216,11 +216,17 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FormInputDataDiri.vb">
+    <Compile Include="FormRegister.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormInputDataDiri.Designer.vb">
-      <DependentUpon>FormInputDataDiri.vb</DependentUpon>
+    <Compile Include="FormRegister.Designer.vb">
+      <DependentUpon>FormRegister.vb</DependentUpon>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormLogin.Designer.vb">
+      <DependentUpon>FormLogin.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FormLogin.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FormOutput.Designer.vb">
@@ -253,8 +259,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="FormInputDataDiri.resx">
-      <DependentUpon>FormInputDataDiri.vb</DependentUpon>
+    <EmbeddedResource Include="FormRegister.resx">
+      <DependentUpon>FormRegister.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormLogin.resx">
+      <DependentUpon>FormLogin.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormOutput.resx">
       <DependentUpon>FormOutput.vb</DependentUpon>

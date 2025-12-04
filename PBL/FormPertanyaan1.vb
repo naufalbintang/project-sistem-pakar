@@ -38,7 +38,6 @@ Public Class FormPertanyaan1
     End Sub
 
     Private Sub LoadDataFromDatabase()
-        ' Ubah connection string ini sesuai konfigurasi database .mdf Anda
         Dim connectionString As String = "Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=D:\folder kuliah\tugas kuliah\semester 3\Pemrograman visual\PBL\PBL\PBL\SistemPakar.mdf;Integrated Security=True"
         Dim query As String = "SELECT Id_pertanyaan, teks_pertanyaan, bobot_pertanyaan, Id_topik FROM Pertanyaan ORDER BY Id_topik, Id_pertanyaan ASC"
 
