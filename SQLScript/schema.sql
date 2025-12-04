@@ -18,7 +18,8 @@ CREATE TABLE [dbo].[Topik] (
 CREATE TABLE [dbo].[Mahasiswa] (
     [nim]   VARCHAR (10)  NOT NULL,
     [nama]  VARCHAR (100) NOT NULL,
-    [prodi] VARCHAR (100) NOT NULL,
+    [email] VARCHAR (100) NOT NULL,
+    [password] VARCHAR (100) NOT NULL,
     PRIMARY KEY CLUSTERED ([nim] ASC)
 );
 
