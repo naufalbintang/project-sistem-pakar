@@ -2,9 +2,6 @@
 
 Public Class FormRegister
 
-    Private Shared ReadOnly ConnectionString As String = "Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=D:\folder kuliah\tugas kuliah\semester 3\Pemrograman visual\PBL\PBL\PBL\SistemPakar.mdf;Integrated Security=True"
-
-
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ' Inisialisasi: Pusatkan form, atur PasswordChar
         Me.StartPosition = FormStartPosition.CenterScreen
@@ -32,14 +29,14 @@ Public Class FormRegister
         Dim query As String = "INSERT INTO Mahasiswa (nim, nama, email, password) " &
                               "VALUES (@NIM, @NAMA, @EMAIL, @PASSWORD);"
 
-        Using connection As New SqlConnection(ConnectionString)
+        Using connection As SqlConnection = ModuleDB.getConnection()
             Using command As New SqlCommand(query, connection)
 
                 ' 4. Isi Parameter dengan Nilai dari Form
                 command.Parameters.AddWithValue("@NIM", nim)
                 command.Parameters.AddWithValue("@NAMA", nama)
                 command.Parameters.AddWithValue("@EMAIL", email)
-                ' ⚠️ CATATAN KEAMANAN: Password disimpan sebagai Plain Text sesuai skema tabel.
+                ' CATATAN KEAMANAN: Password disimpan sebagai Plain Text sesuai skema tabel.
                 ' Sebaiknya menggunakan Hashing sebelum disimpan!
                 command.Parameters.AddWithValue("@PASSWORD", password)
 

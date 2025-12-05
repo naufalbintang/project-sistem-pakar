@@ -38,11 +38,10 @@ Public Class FormPertanyaan1
     End Sub
 
     Private Sub LoadDataFromDatabase()
-        Dim connectionString As String = "Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=D:\folder kuliah\tugas kuliah\semester 3\Pemrograman visual\PBL\PBL\PBL\SistemPakar.mdf;Integrated Security=True"
         Dim query As String = "SELECT Id_pertanyaan, teks_pertanyaan, bobot_pertanyaan, Id_topik FROM Pertanyaan ORDER BY Id_topik, Id_pertanyaan ASC"
 
         Try
-            Using connection As New SqlConnection(connectionString)
+            Using connection As SqlConnection = ModuleDB.getConnection()
                 connection.Open()
                 Using command As New SqlCommand(query, connection)
                     Using reader As SqlDataReader = command.ExecuteReader()
