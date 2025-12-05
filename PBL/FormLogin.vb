@@ -2,11 +2,6 @@
 
 Public Class FormLogin
 
-    Private Shared ReadOnly ConnectionString As String = "Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=D:\folder kuliah\tugas kuliah\semester 3\Pemrograman visual\PBL\PBL\PBL\SistemPakar.mdf;Integrated Security=True"
-
-
-
-
     Private Sub FormLogin_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ' Mengatur posisi form di tengah layar
         Me.StartPosition = FormStartPosition.CenterScreen
@@ -18,7 +13,6 @@ Public Class FormLogin
 
     ' --- Event untuk Tombol Login ---
     Private Sub btnLogin_Click(sender As Object, e As EventArgs) Handles ButtonSignin.Click
-
         Dim nim As String = TextBoxNIM.Text.Trim()
         Dim password As String = TextBoxPassword.Text
 
@@ -30,11 +24,11 @@ Public Class FormLogin
 
         ' 2. Logika Otentikasi dengan Database
         ' Query untuk mengambil password (atau hash) dari tabel Mahasiswa berdasarkan NIM.
-        ' ⚠️ Sesuaikan nama tabel (e.g., Mahasiswa) dan kolom (e.g., PasswordHash) dengan database Anda.
+        ' Sesuaikan nama tabel (e.g., Mahasiswa) dan kolom (e.g., PasswordHash) dengan database Anda.
         Dim query As String = "SELECT password FROM Mahasiswa WHERE nim = @NIM;"
 
         ' Menggunakan blok Using memastikan objek koneksi dan command tertutup dengan benar
-        Using connection As New SqlConnection(ConnectionString)
+        Using connection As SqlConnection = ModuleDB.getConnection()
             Using command As New SqlCommand(query, connection)
 
                 ' Mencegah SQL Injection dengan menggunakan Parameter
