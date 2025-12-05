@@ -58,7 +58,7 @@ Public Class FormRegister
                         TextBoxNIM.Focus()
 
                         ' Opsional: Tutup form Registrasi dan kembali ke Login
-                        ' Me.Close()
+                        Me.Close()
                     Else
                         MessageBox.Show("Data gagal disimpan. Coba lagi.", "Gagal", MessageBoxButtons.OK, MessageBoxIcon.Error)
                     End If
@@ -77,6 +77,11 @@ Public Class FormRegister
             End Using
         End Using
 
+    End Sub
+
+    Private Sub lblSignUp_Click(sender As Object, e As EventArgs) Handles LinkLabelSignin.Click
+        Dim formLogin As New FormLogin()
+        formLogin.Show()
     End Sub
 
 End Class

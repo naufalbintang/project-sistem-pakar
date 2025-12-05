@@ -77,7 +77,7 @@ Public Class FormLogin
 
             End Using
         End Using
-
+        'Me.Close()
     End Sub
 
     ' --- Event untuk Link Sign-up (lblSignUp) ---

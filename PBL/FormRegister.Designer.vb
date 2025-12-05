@@ -32,6 +32,8 @@ Partial Class FormRegister
         Me.TextBoxEmail = New System.Windows.Forms.TextBox()
         Me.ButtonSimpan = New System.Windows.Forms.Button()
         Me.TextBoxPassword = New System.Windows.Forms.TextBox()
+        Me.Label6 = New System.Windows.Forms.Label()
+        Me.LinkLabelSignin = New System.Windows.Forms.LinkLabel()
         Me.SuspendLayout()
         '
         'Label1
@@ -109,7 +111,7 @@ Partial Class FormRegister
         Me.ButtonSimpan.BackColor = System.Drawing.SystemColors.ControlDarkDark
         Me.ButtonSimpan.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!)
         Me.ButtonSimpan.ForeColor = System.Drawing.SystemColors.ButtonFace
-        Me.ButtonSimpan.Location = New System.Drawing.Point(225, 391)
+        Me.ButtonSimpan.Location = New System.Drawing.Point(225, 415)
         Me.ButtonSimpan.Name = "ButtonSimpan"
         Me.ButtonSimpan.Size = New System.Drawing.Size(500, 36)
         Me.ButtonSimpan.TabIndex = 9
@@ -124,11 +126,32 @@ Partial Class FormRegister
         Me.TextBoxPassword.Size = New System.Drawing.Size(500, 25)
         Me.TextBoxPassword.TabIndex = 10
         '
-        'FormIRegister
+        'Label6
+        '
+        Me.Label6.AutoSize = True
+        Me.Label6.Location = New System.Drawing.Point(385, 383)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(125, 16)
+        Me.Label6.TabIndex = 11
+        Me.Label6.Text = "Sudah punya akun?"
+        '
+        'LinkLabelSignin
+        '
+        Me.LinkLabelSignin.AutoSize = True
+        Me.LinkLabelSignin.Location = New System.Drawing.Point(516, 383)
+        Me.LinkLabelSignin.Name = "LinkLabelSignin"
+        Me.LinkLabelSignin.Size = New System.Drawing.Size(48, 16)
+        Me.LinkLabelSignin.TabIndex = 13
+        Me.LinkLabelSignin.TabStop = True
+        Me.LinkLabelSignin.Text = "Sign-in"
+        '
+        'FormRegister
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(953, 473)
+        Me.Controls.Add(Me.LinkLabelSignin)
+        Me.Controls.Add(Me.Label6)
         Me.Controls.Add(Me.TextBoxPassword)
         Me.Controls.Add(Me.ButtonSimpan)
         Me.Controls.Add(Me.TextBoxEmail)
@@ -139,7 +162,7 @@ Partial Class FormRegister
         Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label1)
-        Me.Name = "FormIRegister"
+        Me.Name = "FormRegister"
         Me.Text = "Form1"
         Me.ResumeLayout(False)
         Me.PerformLayout()
@@ -156,4 +179,6 @@ Partial Class FormRegister
     Friend WithEvents TextBoxEmail As TextBox
     Friend WithEvents ButtonSimpan As Button
     Friend WithEvents TextBoxPassword As TextBox
+    Friend WithEvents Label6 As Label
+    Friend WithEvents LinkLabelSignin As LinkLabel
 End Class
