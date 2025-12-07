@@ -23,9 +23,9 @@ Public Class FormLogin
         End If
 
         ' 2. Logika Otentikasi dengan Database
-        ' Query untuk mengambil password (atau hash) dari tabel Mahasiswa berdasarkan NIM.
+        ' Query untuk mengambil password (atau hash) dari tabel USER berdasarkan NIM.
         ' Sesuaikan nama tabel (e.g., Mahasiswa) dan kolom (e.g., PasswordHash) dengan database Anda.
-        Dim query As String = "SELECT password FROM Mahasiswa WHERE nim = @NIM;"
+        Dim query As String = "SELECT password FROM [User] WHERE nim = @NIM;"
 
         ' Menggunakan blok Using memastikan objek koneksi dan command tertutup dengan benar
         Using connection As SqlConnection = ModuleDB.getConnection()

@@ -1,6 +1,7 @@
 ﻿Imports System.Data.SqlClient
 Imports System.Windows.Forms
 Imports System.Drawing
+Imports System.Linq 
 
 Public Class FormPertanyaan1
 
@@ -8,11 +9,17 @@ Public Class FormPertanyaan1
     ' STRUKTUR DATA DAN VARIABEL GLOBAL
     ' =========================================================================
 
-    ' Struktur data untuk menampung data pertanyaan dari database
+    ' 1. Struktur data untuk menampung data pertanyaan dari database
     Public Class QuestionData
         Public Property IdPertanyaan As String
         Public Property TeksPertanyaan As String
         Public Property Bobot As Integer
+    End Class
+
+    ' 2. Struktur data untuk menampung hasil skor per topik (OUTPUT ARRAY)
+    Public Class HasilTopik
+        Public Property IdTopik As String
+        Public Property TotalSkorTopik As Integer
     End Class
 
     ' Dictionary untuk menyimpan semua data pertanyaan, dikelompokkan per Topik (T01, T02, dst)
@@ -74,10 +81,8 @@ Public Class FormPertanyaan1
     ' =========================================================================
 
     Private Sub TampilkanSection()
-        ' Bersihkan Panel konten utama
         PanelPertanyaan1.Controls.Clear()
 
-        ' Tentukan Id Topik yang akan ditampilkan
         Dim idTopik As String = $"T0{currentSectionIndex}"
 
         If Not dataPertanyaanByTopik.ContainsKey(idTopik) Then
@@ -86,12 +91,11 @@ Public Class FormPertanyaan1
         End If
 
         Dim questions As List(Of QuestionData) = dataPertanyaanByTopik(idTopik)
-        Dim currentY As Integer = 5 ' Posisi Y awal di Panel Konten Utama
+        Dim currentY As Integer = 5
 
         Me.Text = $"Sistem Pakar - Section {currentSectionIndex} / {TOTAL_SECTIONS}"
 
         For Each question As QuestionData In questions
-            ' KUNCI ISOLASI: Buat Panel Individu untuk setiap pertanyaan
             Dim pnlPertanyaanIndividual As New Panel()
             pnlPertanyaanIndividual.Width = PanelPertanyaan1.Width - 10
             pnlPertanyaanIndividual.BorderStyle = BorderStyle.None
@@ -104,7 +108,6 @@ Public Class FormPertanyaan1
             lblTanya.AutoSize = False
             lblTanya.Width = pnlPertanyaanIndividual.Width
 
-            ' Hitung tinggi label untuk WordWrap
             Dim requiredSize As Size = TextRenderer.MeasureText(lblTanya.Text, lblTanya.Font, New Size(lblTanya.Width, 0), TextFormatFlags.WordBreak)
             lblTanya.Height = requiredSize.Height + 5
             pnlPertanyaanIndividual.Controls.Add(lblTanya)
@@ -151,7 +154,7 @@ Public Class FormPertanyaan1
         Next
 
         ' 6. Update status tombol navigasi
-        ButtonSebelum.Visible = currentSectionIndex > 1 ' Sembunyikan di section 1
+        ButtonSebelum.Visible = currentSectionIndex > 1
         ButtonLanjut.Text = If(currentSectionIndex = TOTAL_SECTIONS, "Hitung Hasil", "Selanjutnya")
     End Sub
 
@@ -166,18 +169,20 @@ Public Class FormPertanyaan1
             Return
         End If
 
-        ' Validasi jawaban di section saat ini (4 pertanyaan)
+        ' Validasi jawaban
         Dim currentTopicId As String = $"T0{currentSectionIndex}"
         Dim answeredCount As Integer = 0
-        For Each q As QuestionData In dataPertanyaanByTopik(currentTopicId)
-            If jawabanPengguna.ContainsKey(q.IdPertanyaan) Then
-                answeredCount += 1
-            End If
-        Next
+        If dataPertanyaanByTopik.ContainsKey(currentTopicId) Then
+            For Each q As QuestionData In dataPertanyaanByTopik(currentTopicId)
+                If jawabanPengguna.ContainsKey(q.IdPertanyaan) Then
+                    answeredCount += 1
+                End If
+            Next
 
-        If answeredCount < dataPertanyaanByTopik(currentTopicId).Count Then
-            MessageBox.Show("Harap jawab semua 4 pertanyaan di section ini sebelum melanjutkan.", "Validasi Jawaban", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            Return
+            If answeredCount < dataPertanyaanByTopik(currentTopicId).Count Then
+                MessageBox.Show("Harap jawab semua pertanyaan di section ini sebelum melanjutkan.", "Validasi Jawaban", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                Return
+            End If
         End If
 
         currentSectionIndex += 1
@@ -197,7 +202,6 @@ Public Class FormPertanyaan1
             Dim idPertanyaan As String = rb.Tag.ToString()
             Dim jawaban As String = rb.Text
 
-            ' Simpan jawaban ke dalam Dictionary
             If jawabanPengguna.ContainsKey(idPertanyaan) Then
                 jawabanPengguna(idPertanyaan) = jawaban
             Else
@@ -206,39 +210,120 @@ Public Class FormPertanyaan1
         End If
     End Sub
 
+
     ' =========================================================================
-    ' 4. PERHITUNGAN HASIL AKHIR
+    ' 4. PERHITUNGAN HASIL AKHIR (OUTPUT ARRAY)
     ' =========================================================================
 
     Private Sub HitungHasilPakar()
-        ' Validasi apakah semua 20 pertanyaan sudah dijawab
         If jawabanPengguna.Count < TOTAL_QUESTIONS Then
             MessageBox.Show($"Harap jawab semua {TOTAL_QUESTIONS} pertanyaan sebelum menghitung hasil.", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Return
         End If
 
-        Dim totalSkor As Integer = 0
+        Dim skorPerTopik As New Dictionary(Of String, Integer)
+        ' Variabel OUTPUT: List of Objects yang berisi hasil skor per topik
+        Dim hasilOutputArray As New List(Of HasilTopik)
 
-        ' Iterasi semua pertanyaan yang dijawab "Iya"
-        For Each item In jawabanPengguna
-            Dim idPertanyaan As String = item.Key
-            Dim jawaban As String = item.Value
-
-            If jawaban.Equals("Iya", StringComparison.OrdinalIgnoreCase) Then
-                ' Cari bobot pertanyaan di seluruh data yang sudah dimuat
-                For Each topicEntry In dataPertanyaanByTopik.Values
-                    Dim questionData = topicEntry.Find(Function(q) q.IdPertanyaan = idPertanyaan)
-                    If questionData IsNot Nothing Then
-                        totalSkor += questionData.Bobot
-                        Exit For
-                    End If
-                Next
+        ' 1. Inisialisasi skor
+        For i As Integer = 1 To TOTAL_SECTIONS
+            Dim idTopik As String = $"T0{i}"
+            If dataPertanyaanByTopik.ContainsKey(idTopik) Then
+                skorPerTopik.Add(idTopik, 0)
             End If
         Next
 
-        MessageBox.Show($"Analisis Selesai! Total Skor Anda adalah: {totalSkor}", "Hasil Analisis Sistem Pakar")
+        ' 2. Hitung skor per topik
+        For Each topicEntry In dataPertanyaanByTopik
+            Dim idTopikSaatIni As String = topicEntry.Key
 
-        ' TODO: Tambahkan logika untuk menentukan Kesimpulan/Rekomendasi berdasarkan totalSkor
+            For Each q As QuestionData In topicEntry.Value
+                If jawabanPengguna.ContainsKey(q.IdPertanyaan) AndAlso jawabanPengguna(q.IdPertanyaan).Equals("Iya", StringComparison.OrdinalIgnoreCase) Then
+                    If skorPerTopik.ContainsKey(idTopikSaatIni) Then
+                        skorPerTopik(idTopikSaatIni) += q.Bobot
+                    End If
+                End If
+            Next
+        Next
+
+        ' 3. Konversi Dictionary ke List/Array of Objects dan Tampilkan
+        Dim totalSkorGlobal As Integer = 0
+        Dim hasilTeks As New System.Text.StringBuilder()
+
+        For Each item In skorPerTopik.OrderBy(Function(kvp) kvp.Key)
+            Dim result As New HasilTopik() With {
+                .IdTopik = item.Key,
+                .TotalSkorTopik = item.Value
+            }
+            hasilOutputArray.Add(result)
+            totalSkorGlobal += item.Value
+            hasilTeks.AppendLine($"{result.IdTopik}: {result.TotalSkorTopik}")
+        Next
+
+        MessageBox.Show($"Analisis Selesai! Total Skor Global: {totalSkorGlobal}{Environment.NewLine}{Environment.NewLine}--- Skor Rinci per Topik ---{Environment.NewLine}{hasilTeks.ToString()}", "Hasil Analisis Sistem Pakar")
+
+        '' 4. Tentukan Rekomendasi Akhir
+        'TentukanRekomendasi(hasilOutputArray)
+
     End Sub
+
+
+    '' =========================================================================
+    '' 5. PENENTUAN REKOMENDASI BERDASARKAN SKOR TOPIK
+    '' =========================================================================
+
+    'Private Sub TentukanRekomendasi(ByVal hasilSkorRinci As List(Of HasilTopik))
+
+    '    ' Konversi List of Objects menjadi Dictionary agar mudah diakses
+    '    Dim skorMap As New Dictionary(Of String, Integer)
+    '    For Each hasil In hasilSkorRinci
+    '        skorMap.Add(hasil.IdTopik, hasil.TotalSkorTopik)
+    '    Next
+
+    '    ' Ambil skor yang spesifik
+    '    Dim skorT01 As Integer = If(skorMap.ContainsKey("T01"), skorMap("T01"), 0)
+    '    Dim skorT02 As Integer = If(skorMap.ContainsKey("T02"), skorMap("T02"), 0)
+    '    Dim skorT03 As Integer = If(skorMap.ContainsKey("T03"), skorMap("T03"), 0)
+    '    Dim skorT04 As Integer = If(skorMap.ContainsKey("T04"), skorMap("T04"), 0)
+    '    Dim skorT05 As Integer = If(skorMap.ContainsKey("T05"), skorMap("T05"), 0)
+
+    '    Dim rekomendasiFinal As String = "Tidak ada rekomendasi spesifik yang cocok dengan aturan."
+
+    '    ' --- ATURAN SISTEM PAKAR (Contoh) ---
+
+    '    Dim skorTertinggi As Integer = hasilSkorRinci.Max(Function(h) h.TotalSkorTopik)
+    '    Dim topikTertinggi As HasilTopik = hasilSkorRinci.First(Function(h) h.TotalSkorTopik = skorTertinggi)
+
+    '    ' Identifikasi semua topik yang memiliki skor tertinggi (untuk kasus skor sama)
+    '    Dim topikDenganSkorTertinggi = hasilSkorRinci.Where(Function(h) h.TotalSkorTopik = skorTertinggi).ToList()
+
+    '    If skorTertinggi < 50 Then
+    '        ' Aturan: Jika skor tertinggi di bawah 50 (ambang batas rendah)
+    '        rekomendasiFinal = "Skor di semua topik relatif rendah. Mungkin diperlukan konsultasi mendalam untuk mengidentifikasi minat."
+    '    ElseIf topikDenganSkorTertinggi.Count > 1 Then
+    '        ' Aturan: Jika ada skor tertinggi ganda (misal T01 = 80, T02 = 80)
+    '        Dim listTopik As New System.Text.StringBuilder()
+    '        For Each t In topikDenganSkorTertinggi
+    '            listTopik.Append($"{t.IdTopik}, ")
+    '        Next
+    '        listTopik.Length -= 2 ' Hapus koma terakhir
+
+    '        rekomendasiFinal = $"KECENDERUNGAN GANDA: Anda memiliki kecenderungan kuat di Topik {listTopik.ToString()}. Pertimbangkan jalur karir interdisipliner atau dua fokus sekaligus."
+    '    ElseIf topikTertinggi.IdTopik = "T01" Then
+    '        rekomendasiFinal = $"KECENDERUNGAN UTAMA: Bidang 1 (T01). Rekomendasi: Fokus pada keahlian inti bidang 1."
+    '    ElseIf topikTertinggi.IdTopik = "T02" Then
+    '        rekomendasiFinal = $"KECENDERUNGAN UTAMA: Bidang 2 (T02). Rekomendasi: Fokus pada pengembangan keterampilan khusus bidang 2."
+    '    ElseIf topikTertinggi.IdTopik = "T03" Then
+    '        rekomendasiFinal = $"KECENDERUNGAN UTAMA: Bidang 3 (T03). Rekomendasi: Anda memiliki potensi kuat di bidang manajerial atau kepemimpinan."
+    '    ElseIf topikTertinggi.IdTopik = "T04" Then
+    '        rekomendasiFinal = $"KECENDERUNGAN UTAMA: Bidang 4 (T04). Rekomendasi: Fokus pada jalur karir yang membutuhkan analisis mendalam dan penelitian."
+    '    ElseIf topikTertinggi.IdTopik = "T05" Then
+    '        rekomendasiFinal = $"KECENDERUNGAN UTAMA: Bidang 5 (T05). Rekomendasi: Anda cocok untuk peran yang membutuhkan kreativitas dan komunikasi tinggi."
+    '    End If
+
+    '    ' Tampilkan Hasil Rekomendasi Akhir
+    '    MessageBox.Show($"Kesimpulan Pakar:{Environment.NewLine}{rekomendasiFinal}", "Rekomendasi Sistem Pakar", MessageBoxButtons.OK, MessageBoxIcon.Information)
+
+    'End Sub
 
 End Class

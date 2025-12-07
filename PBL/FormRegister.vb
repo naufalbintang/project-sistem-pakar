@@ -24,10 +24,10 @@ Public Class FormRegister
         End If
 
         ' 3. Query SQL INSERT
-        ' Query ini memasukkan data baru ke tabel Mahasiswa.
+        ' Query ini memasukkan data baru ke tabel USER.
         ' Kami menggunakan Parameter (@...) untuk keamanan SQL Injection.
-        Dim query As String = "INSERT INTO Mahasiswa (nim, nama, email, password) " &
-                              "VALUES (@NIM, @NAMA, @EMAIL, @PASSWORD);"
+        Dim query As String = "INSERT INTO [USER] (nim, nama, email, role, password) " &
+                              "VALUES (@NIM, @NAMA, @EMAIL, @ROLE, @PASSWORD);"
 
         Using connection As SqlConnection = ModuleDB.getConnection()
             Using command As New SqlCommand(query, connection)
@@ -36,6 +36,7 @@ Public Class FormRegister
                 command.Parameters.AddWithValue("@NIM", nim)
                 command.Parameters.AddWithValue("@NAMA", nama)
                 command.Parameters.AddWithValue("@EMAIL", email)
+                command.Parameters.AddWithValue("@ROLE", "Mahasiswa") ' Role default sebagai Mahasiswa
                 ' CATATAN KEAMANAN: Password disimpan sebagai Plain Text sesuai skema tabel.
                 ' Sebaiknya menggunakan Hashing sebelum disimpan!
                 command.Parameters.AddWithValue("@PASSWORD", password)
