@@ -26,8 +26,13 @@ Public Class FormRegister
         ' 3. Query SQL INSERT
         ' Query ini memasukkan data baru ke tabel USER.
         ' Kami menggunakan Parameter (@...) untuk keamanan SQL Injection.
+<<<<<<< HEAD
         Dim query As String = "INSERT INTO [USER] (nim, nama, email, role, password) " &
                               "VALUES (@NIM, @NAMA, @EMAIL, @ROLE, @PASSWORD);"
+=======
+        Dim query As String = "INSERT INTO Akun (Id_user, nama, email, password) " &
+                              "VALUES (@NIM, @NAMA, @EMAIL, @PASSWORD);"
+>>>>>>> b53a46026a632521984a4210d3e5a9a9a0b67207
 
         Using connection As SqlConnection = ModuleDB.getConnection()
             Using command As New SqlCommand(query, connection)

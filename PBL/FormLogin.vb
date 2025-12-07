@@ -13,11 +13,11 @@ Public Class FormLogin
 
     ' --- Event untuk Tombol Login ---
     Private Sub btnLogin_Click(sender As Object, e As EventArgs) Handles ButtonSignin.Click
-        Dim nim As String = TextBoxNIM.Text.Trim()
+        Dim idUser As String = TextBoxNIM.Text.Trim()
         Dim password As String = TextBoxPassword.Text
 
         ' 1. Validasi Input Sederhana
-        If nim = "" Or password = "" Then
+        If idUser = "" Or password = "" Then
             MessageBox.Show("NIM dan Password harus diisi!", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Return
         End If
@@ -25,14 +25,18 @@ Public Class FormLogin
         ' 2. Logika Otentikasi dengan Database
         ' Query untuk mengambil password (atau hash) dari tabel USER berdasarkan NIM.
         ' Sesuaikan nama tabel (e.g., Mahasiswa) dan kolom (e.g., PasswordHash) dengan database Anda.
+<<<<<<< HEAD
         Dim query As String = "SELECT password FROM [User] WHERE nim = @NIM;"
+=======
+        Dim query As String = "SELECT password FROM Akun WHERE Id_user = @idUser;"
+>>>>>>> b53a46026a632521984a4210d3e5a9a9a0b67207
 
         ' Menggunakan blok Using memastikan objek koneksi dan command tertutup dengan benar
         Using connection As SqlConnection = ModuleDB.getConnection()
             Using command As New SqlCommand(query, connection)
 
                 ' Mencegah SQL Injection dengan menggunakan Parameter
-                command.Parameters.AddWithValue("@NIM", nim)
+                command.Parameters.AddWithValue("@idUser", idUser)
 
                 Try
                     connection.Open()
