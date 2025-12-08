@@ -51,7 +51,7 @@ Public Class FormLogin
                             ' --- Tampilkan Form Utama ---
                             ' Ganti FormMenu() dengan nama form utama aplikasi Anda
                             Me.Hide()
-                            Dim formUtama As New FormPertanyaan1()
+                            Dim formUtama As New FormPertanyaan1(idUser)
                             formUtama.Show()
 
                         Else

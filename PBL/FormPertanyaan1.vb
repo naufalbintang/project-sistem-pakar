@@ -27,7 +27,7 @@ Public Class FormPertanyaan1
 
     Public Sub New()
         InitializeComponent()
-        Me.UserNIM = "GUEST"
+        Me.UserNIM = 2407411048 ' Ambil dari ModuleDB
     End Sub
 
     Private Sub FormPertanyaan1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -136,32 +136,93 @@ Public Class FormPertanyaan1
         End If
     End Sub
 
+    ' --- AMBIL DATA AKUN DARI DATABASE ---
+    Private Function AmbilDataAkun(ByVal userId As String) As Tuple(Of String, String, String)
+        Dim nama As String = "N/A"
+        Dim email As String = "N/A"
+        Dim nim As String = userId ' NIM adalah Id_user
+
+        Dim query As String = "SELECT nama, email FROM Akun WHERE Id_user = @UserId"
+
+        Try
+            Using connection As SqlConnection = ModuleDB.getConnection()
+                connection.Open()
+                Using command As New SqlCommand(query, connection)
+                    command.Parameters.AddWithValue("@UserId", userId)
+                    Using reader As SqlDataReader = command.ExecuteReader()
+                        If reader.Read() Then
+                            nama = reader("nama").ToString()
+                            email = reader("email").ToString()
+                        End If
+                    End Using
+                End Using
+            End Using
+        Catch ex As Exception
+            MessageBox.Show("Gagal memuat data Akun: " & ex.Message, "Database Error")
+        End Try
+
+        ' Mengembalikan data sebagai Tuple: (Nama, NIM/Id_user, Email)
+        Return New Tuple(Of String, String, String)(nama, nim, email)
+    End Function
+
+
+    ' --- KIRIM DATA KE MESIN INFERENSI & TAMPILKAN HASIL ---
     Private Sub KirimKeMesinInferensi()
-        ' 1. Panggil Fungsi di Module (Kirim Data Soal & Array Jawaban)
+
+        ' Variabel untuk Hasil
+        Dim SkorHasilRingkasan As String = ""
+        Dim hasilRekomendasi As String = ""
+        Dim StatistikDetil As String = ""
+
+        ' Ambil Data Akun untuk Ditampilkan di Output
+        Dim dataAkun = AmbilDataAkun(Me.UserNIM)
+        Dim inputNama As String = dataAkun.Item1
+        Dim inputNIM As String = dataAkun.Item2
+        Dim inputEmail As String = dataAkun.Item3
+
+        ' 1. Panggil Fungsi di Module
         Dim hasilAkhir As Dictionary(Of String, Integer) = ModuleInference.HitungSkor(allQuestionsList, userAnswers)
 
         ' 2. Olah Hasil Balikan untuk Ditampilkan
-        Dim sb As New System.Text.StringBuilder()
-        sb.AppendLine("===== HASIL DIAGNOSA =====" & vbCrLf)
-
-        ' Urutkan dari skor terbesar
         Dim urutan = hasilAkhir.OrderByDescending(Function(x) x.Value).ToList()
 
+        Dim sbStatistik As New System.Text.StringBuilder()
+        Dim totalSkor As Integer = 0
+
+        ' LOOP UNTUK MEMBANGUN STATISTIK DETIL DAN MENGHITUNG TOTAL SKOR
         For Each h In urutan
             Dim namaJurusan As String = ModuleInference.GetNamaTopik(h.Key)
-            sb.AppendLine($"{namaJurusan} : {h.Value} Poin")
+            sbStatistik.AppendLine($"{namaJurusan} : {h.Value} Poin")
+            totalSkor += h.Value
         Next
 
+        ' PENGISIAN VARIABEL OUTPUT (MENGATASI Perbedaan 1)
+        StatistikDetil = sbStatistik.ToString()
+
         Dim juara = urutan(0)
-        sb.AppendLine()
 
         If juara.Value = 0 Then
-            sb.AppendLine("KESIMPULAN: Tidak ada minat yang terdeteksi.")
+            hasilRekomendasi = "TIDAK ADA MINAT TERDETEKSI JELAS"
         Else
-            sb.AppendLine($"REKOMENDASI: {ModuleInference.GetNamaTopik(juara.Key).ToUpper()}")
+            hasilRekomendasi = ModuleInference.GetNamaTopik(juara.Key).ToUpper()
         End If
 
-        MessageBox.Show(sb.ToString(), "Hasil Akhir")
+        SkorHasilRingkasan = $"Skor Tertinggi: {juara.Value} Poin (Total Keseluruhan: {totalSkor})"
+
+        ' 3. Tampilkan Hasil ke FormOutput
+        Dim OutputForm As New FormOutput()
+
+        OutputForm.TampilkanHasil(
+        Nama:=inputNama,
+        NIM:=inputNIM,
+        Email:=inputEmail,
+        SkorHasil:=SkorHasilRingkasan,
+        Rekomendasi:=hasilRekomendasi,
+        StatistikDetil:=StatistikDetil
+    )
+
+        OutputForm.Show()
+        Me.Hide()
     End Sub
 
 End Class
