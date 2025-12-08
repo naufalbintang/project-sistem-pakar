@@ -46,7 +46,7 @@ CREATE TABLE [dbo].[Akun] (
     [Id_user]  VARCHAR (18)  NOT NULL, -- Panjang 18 (e.g., NIM)
     [nama]     VARCHAR (100) NOT NULL,
     [email]    VARCHAR (100) NOT NULL,
-    [password] VARCHAR (100) NOT NULL,
+    [password] VARCHAR (255) NOT NULL,
     [role]     VARCHAR (10)  NOT NULL DEFAULT 'mahasiswa',
     PRIMARY KEY CLUSTERED ([Id_user] ASC)
 );
@@ -131,7 +131,7 @@ INSERT INTO Pertanyaan (Id_pertanyaan, teks_pertanyaan, bobot_pertanyaan, Id_top
 VALUES ('P002', 'Apakah Anda tertarik membangun aplikasi yang memiliki user interface visual (Web/Mobile)?', 10, 'T01');
 
 INSERT INTO Pertanyaan (Id_pertanyaan, teks_pertanyaan, bobot_pertanyaan, Id_topik) 
-VALUES ('P003', 'Apakah Anda menguasai konsep CRUD (Create, Read, Update, Delete) dalam coding?', 50, 'T01');
+VALUES ('P003', 'Apakah Anda menguasai konsep CRUD (Create, Read, Update, Delete) dalam coding?', 60, 'T01');
 
 INSERT INTO Pertanyaan (Id_pertanyaan, teks_pertanyaan, bobot_pertanyaan, Id_topik) 
 VALUES ('P004', 'Apakah Anda lebih suka melihat hasil coding yang langsung terlihat bentuk fisiknya (tombol/form)?', 10, 'T01');
@@ -148,12 +148,12 @@ INSERT INTO Pertanyaan (Id_pertanyaan, teks_pertanyaan, bobot_pertanyaan, Id_top
 VALUES ('P007', 'Apakah Anda lebih menikmati mengolah data mentah mencari pola daripada mendesain tampilan?', 10, 'T02');
 
 INSERT INTO Pertanyaan (Id_pertanyaan, teks_pertanyaan, bobot_pertanyaan, Id_topik) 
-VALUES ('P008', 'Apakah Anda familiar dengan library pengolahan data seperti Pandas, Scikit-Learn, atau TensorFlow?', 50, 'T02');
+VALUES ('P008', 'Apakah Anda familiar dengan library pengolahan data seperti Pandas, Scikit-Learn, atau TensorFlow?', 60, 'T02');
 
 
 -- === 3. TOPIK: NETWORK & SECURITY (T03) ===
 INSERT INTO Pertanyaan (Id_pertanyaan, teks_pertanyaan, bobot_pertanyaan, Id_topik) 
-VALUES ('P009', 'Apakah Anda lebih suka mengkonfigurasi server, router, dan IP address daripada coding aplikasi?', 50, 'T03');
+VALUES ('P009', 'Apakah Anda lebih suka mengkonfigurasi server, router, dan IP address daripada coding aplikasi?', 60, 'T03');
 
 INSERT INTO Pertanyaan (Id_pertanyaan, teks_pertanyaan, bobot_pertanyaan, Id_topik) 
 VALUES ('P010', 'Apakah Anda tertarik dengan isu keamanan siber, hacking, dan cara memproteksi sistem?', 10, 'T03');
@@ -176,7 +176,7 @@ INSERT INTO Pertanyaan (Id_pertanyaan, teks_pertanyaan, bobot_pertanyaan, Id_top
 VALUES ('P015', 'Apakah Anda ingin membuat sistem kendali peralatan rumah tangga jarak jauh (Smart Home)?', 10, 'T04');
 
 INSERT INTO Pertanyaan (Id_pertanyaan, teks_pertanyaan, bobot_pertanyaan, Id_topik) 
-VALUES ('P016', 'Apakah Anda pernah/mau belajar memprogram mikrokontroler (Arduino, ESP32, Raspberry Pi)?', 50, 'T04');
+VALUES ('P016', 'Apakah Anda pernah/mau belajar memprogram mikrokontroler (Arduino, ESP32, Raspberry Pi)?', 60, 'T04');
 
 
 -- === 5. TOPIK: MULTIMEDIA & GAME DEV (T05) ===
@@ -184,7 +184,7 @@ INSERT INTO Pertanyaan (Id_pertanyaan, teks_pertanyaan, bobot_pertanyaan, Id_top
 VALUES ('P017', 'Apakah Anda memiliki ketertarikan tinggi pada desain grafis, animasi, atau aset visual 3D?', 10, 'T05');
 
 INSERT INTO Pertanyaan (Id_pertanyaan, teks_pertanyaan, bobot_pertanyaan, Id_topik) 
-VALUES ('P018', 'Apakah Anda tertarik logika fisika komputer (gravitasi/tumbukan) untuk simulasi game?', 50, 'T05');
+VALUES ('P018', 'Apakah Anda tertarik logika fisika komputer (gravitasi/tumbukan) untuk simulasi game?', 60, 'T05');
 
 INSERT INTO Pertanyaan (Id_pertanyaan, teks_pertanyaan, bobot_pertanyaan, Id_topik) 
 VALUES ('P019', 'Apakah Anda ingin membuat aplikasi Augmented Reality (AR) atau Virtual Reality (VR)?', 10, 'T05');
